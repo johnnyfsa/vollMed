@@ -1,17 +1,49 @@
 package br.com.biscoithor.api_med_voll.controller;
 
-import br.com.biscoithor.api_med_voll.paciente.DadosCadastroPaciente;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.com.biscoithor.api_med_voll.medico.DadosAtualizacaoMedico;
+import br.com.biscoithor.api_med_voll.paciente.*;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("pacientes")
 public class PacienteController {
+
+    @Autowired
+    private PacienteRepository repository;
+
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastroPaciente paciente)
+    @Transactional
+    public void cadastrar(@RequestBody @Valid DadosCadastroPaciente paciente)
     {
-        System.out.println(paciente);
+        repository.save(new Paciente(paciente));
     }
+
+    @GetMapping
+    public Page<DadosListagemPaciente> listar (@PageableDefault(page=0,size = 10, sort = {"nome"}) Pageable paginacao)
+    {
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosAtualizacaoPaciente dados)
+    {
+        var paciente = repository.getReferenceById(dados.id());
+        paciente.atualizarInformacoes(dados);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id)
+    {
+        var paciente = repository.getReferenceById(id);
+        paciente.desativar();
+    }
+
 }
