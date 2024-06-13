@@ -1,4 +1,4 @@
-package br.com.biscoithor.api_med_voll.endereco;
+package br.com.biscoithor.api_med_voll.domain.endereco;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

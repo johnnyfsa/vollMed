@@ -1,6 +1,6 @@
-package br.com.biscoithor.api_med_voll.medico;
+package br.com.biscoithor.api_med_voll.domain.medico;
 
-import br.com.biscoithor.api_med_voll.endereco.DadosEndereco;
+import br.com.biscoithor.api_med_voll.domain.endereco.DadosEndereco;
 import jakarta.validation.constraints.NotNull;
 
 public record DadosAtualizacaoMedico(@NotNull Long id, String nome, String telefone, DadosEndereco endereco) {

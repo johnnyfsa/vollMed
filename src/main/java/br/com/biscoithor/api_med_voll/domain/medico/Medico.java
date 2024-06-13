@@ -1,8 +1,6 @@
-package br.com.biscoithor.api_med_voll.paciente;
+package br.com.biscoithor.api_med_voll.domain.medico;
 
-import br.com.biscoithor.api_med_voll.endereco.DadosEndereco;
-import br.com.biscoithor.api_med_voll.endereco.Endereco;
-import br.com.biscoithor.api_med_voll.medico.DadosAtualizacaoMedico;
+import br.com.biscoithor.api_med_voll.domain.endereco.Endereco;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -10,44 +8,38 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "medicos")
 @Getter
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "pacientes")
-public class Paciente {
+@EqualsAndHashCode(of = "id")
+public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private Boolean ativo;
     private String nome;
     private String email;
-    private String telefone;
-    private String cpf;
+    private  String telefone;
+    private String crm;
+    @Enumerated(EnumType.STRING)
+    private Especialidade especialidade;
     @Embedded
     private Endereco endereco;
 
-    public Paciente(DadosCadastroPaciente dados)
-    {
-        this.ativo = true;
-        this.nome=dados.nome();
-        this.email=dados.email();
-        this.telefone=dados.telefone();
-        this.cpf=dados.cpf().replaceAll("\\.|-","");
-        this.endereco= new Endereco(dados.endereco());
+    public Medico(DadosCadastroMedico dados) {
+         this.ativo=true;
+         this.nome=dados.nome();
+         this.email=dados.email();
+         this.telefone= dados.telefone();
+         this.crm=dados.crm();
+         this.especialidade=dados.especialidade();
+         this.endereco= new Endereco(dados.endereco());
     }
 
     public long getId() {
         return id;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
     }
 
     public String getNome() {
@@ -62,19 +54,29 @@ public class Paciente {
         return telefone;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCrm() {
+        return crm;
+    }
+
+    public Especialidade getEspecialidade() {
+        return especialidade;
     }
 
     public Endereco getEndereco() {
         return endereco;
     }
 
-    public void atualizarInformacoes(@Valid DadosAtualizacaoPaciente dados)
-    {
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public void atualizarInformacoes(@Valid DadosAtualizacaoMedico dados) {
         if(dados.nome()!=null) {this.nome = dados.nome();}
         if (dados.telefone()!= null){this.telefone = dados.telefone();}
-        if(dados.email()!=null){this.email= dados.email();}
         if (dados.endereco()!=null){this.endereco.atualizarEndereco(dados.endereco());}
     }
 
