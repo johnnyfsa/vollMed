@@ -1,4 +1,4 @@
-package br.com.biscoithor.api_med_voll.infra;
+package br.com.biscoithor.api_med_voll.infra.errorTreatment;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
