@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 
 @Table(name = "consultas")
 @Entity(name = "Consulta")
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 
 
@@ -34,6 +31,11 @@ public class Consulta {
 
     private LocalDateTime data;
 
+    private boolean cancelada;
+
+    private String motivo;
+
+
     public Consulta(Long id, Medico medico, Paciente paciente, LocalDateTime data) {
         this.id = id;
         this.medico = medico;
@@ -44,5 +46,56 @@ public class Consulta {
     public Consulta() {
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public boolean isCancelada() {
+        return cancelada;
+    }
+
+    public void setCancelada(boolean cancelada) {
+        this.cancelada = cancelada;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public void cancelar(String motivo) {
+        this.setCancelada(true);
+        this.setMotivo(motivo);
+    }
 }

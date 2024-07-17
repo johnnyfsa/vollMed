@@ -1,5 +1,6 @@
 package br.com.biscoithor.api_med_voll.infra.errorTreatment;
 
+import br.com.biscoithor.api_med_voll.domain.ValidacaoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -22,6 +23,13 @@ public class ErrorTreatment {
         var errors = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(errors.stream().map(ValidationErrorDTO::new).toList());
     }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity handleErrorRegraDeNegocio(ValidacaoException ex)
+    {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
 
     private record ValidationErrorDTO(String field, String message)
     {
